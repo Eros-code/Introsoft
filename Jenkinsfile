@@ -1,7 +1,7 @@
 podTemplate(containers: [
     containerTemplate(
-        name: 'node', 
-        image: 'node:18', 
+        name: 'ansible', 
+        image: 'andrewtarry/ansible', 
         command: 'sleep', 
         args: '30d')
   ]) {
