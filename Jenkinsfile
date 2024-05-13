@@ -1,6 +1,8 @@
 pipeline {
-    agent {
-        docker {image 'andrewtarry/ansible:2.13.6'}
+    agent any
+    tools {
+        // Define Docker tool named 'docker' and point it to a Docker installation
+        docker 'docker'
     }
     stages {
         stage('Checkout') {
