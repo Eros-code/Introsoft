@@ -2,7 +2,7 @@ pipeline {
     agent any
     tools {
         // Define Docker tool named 'docker' and point it to a Docker installation
-        dockerTool 'docker'
+        dockerTool 'org.jenkinsci.plugins.docker.commons.tools.DockerTool'
     }
     stages {
         stage('Checkout') {
