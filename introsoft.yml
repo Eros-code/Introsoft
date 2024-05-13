@@ -1,0 +1,63 @@
+---
+- name: introsoft
+  hosts: appservers
+  become: yes
+  vars:
+    introsoftversion: '0.1.0'
+  tasks:
+    - name: Add apprunner
+      ansible.builtin.user:
+        name: apprunner
+        create_home: yes
+
+    - name: Download node set up script
+      ansible.builtin.get_url:
+        url: https://deb.nodesource.com/setup_19.x
+        dest: /tmp/node.sh
+        mode: '0777'
+
+    - name: Run node set up
+      ansible.builtin.shell: /tmp/node.sh
+
+    - name: 'Install nodejs'
+      ansible.builtin.apt:
+        update_cache: yes
+        name: nodejs
+        state: present
+
+    - name: Download code
+      ansible.builtin.shell: gcloud storage cp gs://sigma-cloud-code-store/introsoft-{{ introsoftversion }}.tar.gz  /home/apprunner/introsoft-{{ introsoftversion }}.tar.gz
+      args:
+        creates: /home/apprunner/introsoft-0.1.0.tar.gz
+    - name: Create app dir
+      ansible.builtin.file:
+        path: /home/apprunner/app/v0.1.0
+        owner: apprunner
+        state: directory
+    - name: Extract app code
+      ansible.builtin.unarchive:
+        src: /home/apprunner/introsoft-0.1.0.tar.gz
+        dest: /home/apprunner/app/v0.1.0
+        remote_src: yes
+    - name: Install dependencies
+      ansible.builtin.shell: npm --prefix /home/apprunner/app/v0.1.0 install
+      args:
+        creates: /home/apprunner/app/v0.1.0/node_modules
+    - name: Build
+      ansible.builtin.shell: npm --prefix /home/apprunner/app/v0.1.0 run build
+      args:
+        creates: /home/apprunner/app/v0.1.0/.next
+
+    - name: Reload the master daemon
+      ansible.builtin.systemd_service:
+        daemon_reload: true
+    - name: introsoft service
+      template:
+        src: files/introsoft.service
+        dest: /etc/systemd/system/introsoft.service
+        mode: '0644'
+    - name: Start introsoft
+      service:
+        name: introsoft.service
+        state: restarted
+        enabled: yes
