@@ -1,8 +1,7 @@
 pipeline {
     agent any
-    tools {
-        // Define Docker tool named 'docker' and point it to a Docker installation
-        docker 'docker'
+    environment {
+        DOCKER_HOME = tool name: 'docker', type: 'org.jenkinsci.plugins.docker.commons.tools.DockerTool'
     }
     stages {
         stage('Checkout') {
@@ -14,7 +13,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 // Your deployment steps here
-                sh 'docker run andrewtarry/ansible sleep 30d'
+                sh "${DOCKER_HOME}/bin/docker run andrewtarry/ansible sleep 30d"
                 echo 'Hello Jenkins'
             }
         }
