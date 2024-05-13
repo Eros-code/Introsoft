@@ -1,9 +1,8 @@
 pipeline {
-    agent {
-        docker {
-            // Specify the Docker image to use
-            image 'andrewtarry/ansible'
-        }
+    agent any
+    tools {
+        // Define Docker tool named 'docker' and point it to a Docker installation
+        docker 'docker'
     }
     stages {
         stage('Checkout') {
@@ -15,7 +14,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 // Your deployment steps here
-                sh 'echo Hello Jenkins'
+                sh 'docker run andrewtarry/ansible sleep 30d'
+                echo 'Hello Jenkins'
             }
         }
     }
