@@ -2,7 +2,7 @@ pipeline {
     agent any
     tools {
         // Define Docker tool named 'docker' and point it to a Docker installation
-        docker 'docker'
+        dockerTool 'docker'
     }
     stages {
         stage('Checkout') {
