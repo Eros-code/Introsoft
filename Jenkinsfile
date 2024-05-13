@@ -8,7 +8,7 @@ podTemplate(containers: [
 
     node(POD_LABEL) {
         stage('Step') {
-            container('node') {
+            container('ansible') {
                 stage('Checkout') {
                     checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'git@github.com:Eros-code/Introsoft.git', credentialsId: 'github-eros-code-introsoftDeployKey']]])
                 }
