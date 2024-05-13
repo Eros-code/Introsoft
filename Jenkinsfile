@@ -1,22 +1,22 @@
-podTemplate(containers: [
-    containerTemplate(
-        name: 'ansible', 
-        image: 'andrewtarry/ansible', 
-        command: 'sleep', 
-        args: '30d')
-  ]) {
-
-    node(POD_LABEL) {
-        stage('Step') {
-            container('ansible') {
-                stage('Checkout') {
-                    checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'git@github.com:Eros-code/Introsoft.git', credentialsId: 'github-eros-code-introsoftDeployKey']]])
-                }
-                stage('Deploy') {
-                    sh "echo Hello Jenkins"
-                }
+pipeline {
+    agent {
+        docker {
+            // Specify the Docker image to use
+            image 'andrewtarry/ansible'
+        }
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                // Your checkout steps here
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'git@github.com:Eros-code/Introsoft.git', credentialsId: 'github-eros-code-introsoftDeployKey']]])
+            }
+        }
+        stage('Deploy') {
+            steps {
+                // Your deployment steps here
+                sh 'echo Hello Jenkins'
             }
         }
     }
-
-  }
+}
