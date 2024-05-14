@@ -5,21 +5,6 @@ pipeline {
         dockerTool 'docker-latest'
     }
     stages {
-        stage('Build') {
-            agent {
-                docker {
-                    name 'ansible'
-                    image 'andrewtarry/ansible:2.13.6'
-                    // Run the container on the node specified at the
-                    // top-level of the Pipeline, in the same workspace,
-                    // rather than on a new node entirely:
-                    reuseNode true
-                    alwaysPullImage true
-                    command 'sleep'
-                    args '30d'
-                }
-            }
-        }
         stage('Checkout') {
             steps {
                 // Your checkout steps here
@@ -28,6 +13,14 @@ pipeline {
         }
         stage('Deploy') {
             steps {
+                script{
+                    // Define Docker image and options
+                    def dockerImage = 'andrewtarry/ansible:2.13.6'
+                    def dockerOptions = "--rm -i -v ${pwd()}:/workspace"
+                    // Run commands inside the Docker container
+                    sh "docker run ${dockerOptions} ${dockerImage} /bin/bash -c 'sleep 30d'"
+                    sh "docker run ${dockerOptions} ${dockerImage} /bin/bash -c 'echo Deploying...'"
+                }
                 echo 'Hello Jenkins'
             }
         }
