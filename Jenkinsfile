@@ -19,6 +19,7 @@ pipeline {
                     args '30d'
                 }
             }
+        }
         stage('Checkout') {
             steps {
                 // Your checkout steps here
