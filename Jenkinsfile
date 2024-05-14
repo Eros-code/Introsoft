@@ -8,7 +8,7 @@ pipeline {
         stage('Build') {
             agent {
                 docker {
-                    name 'ansible
+                    name 'ansible'
                     image 'andrewtarry/ansible:2.13.6'
                     // Run the container on the node specified at the
                     // top-level of the Pipeline, in the same workspace,
