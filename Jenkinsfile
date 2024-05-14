@@ -8,7 +8,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Your checkout steps here
-                checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'git@github.com:Eros-code/Introsoft.git', credentialsId: 'github-eros-code-introsoftDeployKey']]])
+                checkout scmGit(branches: [[name: 'main']], extensions: [cloneOption(honorRefspec: true, noTags: true, reference: '', shallow: false), localBranch('main')], userRemoteConfigs: [[credentialsId: 'github-eros-code-IntrosoftDeployKey', url: 'https://github.com/Eros-code/Introsoft.git']])
             }
         }
         stage('Deploy') {
