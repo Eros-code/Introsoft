@@ -13,8 +13,15 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                // Your deployment steps here
-                sh "docker run andrewtarry/ansible sleep 30d"
+                // Define Docker image and options
+                def dockerImage = 'andrewtarry/ansible:2.13.6'
+                def dockerOptions = "--rm -i -v ${pwd()}:/workspace"
+                
+                // Run commands inside the Docker container
+                sh "docker run ${dockerOptions} ${dockerImage} /bin/bash -c 'sleep 30d'"
+                
+
+                sh "docker run ${dockerOptions} ${dockerImage} /bin/bash -c 'echo Deploying...'"
                 echo 'Hello Jenkins'
             }
         }
