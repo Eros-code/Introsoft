@@ -1,10 +1,7 @@
-podTemplate(containers: [
+podTemplate(inheritFrom: 'ansible', containers: [
     containerTemplate(
         name: 'ansible',
-        image: 'andrewtarry/ansible:2.13.6',
-        command: 'sleep',
-        alwaysPullImage: true,
-        args: '30d')
+        image: 'andrewtarry/ansible:2.13.6')
   ]) {
 node(POD_LABEL) {
     stage('Deploy') {
